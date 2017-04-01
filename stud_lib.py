@@ -1,5 +1,168 @@
 import math
 
+def init_code(A):
+    if A[0] == '-':
+        negative_number = True
+        new_string = A.replace('-','')
+        new_number = math.fabs(int(new_string))
+    else:
+        negative_number = False
+        new_number = int(A)
+    X = []
+    i = 0
+    while new_number >= 0:
+        i += 1
+        if new_number == 3:
+            X.append('1')
+            X.append('1')
+            break
+        elif new_number == 2:
+            X.append('0')
+            X.append('1')
+            break
+        rest = int(new_number) % 2
+        X.append(str(rest))
+        new_number = int(new_number / 2)
+
+    X.reverse()
+    t = 0
+    while t < (6 - i):
+        X.append('0')
+        t += 1
+    X.reverse()
+    X.append('.')
+    X.append('0')
+    X.reverse()
+    positive_code = ''.join(X)
+    if negative_number == True:
+        edit_string = positive_code
+        negative_code = edit_string.replace('0','null')
+        negative_code = negative_code.replace('1','one')
+        negative_code = negative_code.replace('null','1')
+        negative_code = negative_code.replace('one','0')
+
+        #рассчёт для addicted_number
+
+        X = []
+        i = 0
+        addicted_number = math.fabs(int(A)) - 1
+        while addicted_number >= 0:
+            i += 1
+            rest = int(addicted_number) % 2
+            X.append(str(rest))
+            addicted_number = int(addicted_number / 2)
+            if addicted_number == 0:
+                X.append('0')
+                break
+            elif addicted_number == 1:
+                X.append('1')
+                break
+        t = 0
+        while t < (6 - i):
+            X.append('0')
+            t += 1
+        X.append('.')
+        X.append('0')
+        X.reverse()
+        addicted_code = ''.join(X)
+        edit_addicted_string = addicted_code
+        negative_addicted_code = edit_addicted_string.replace('0','null')
+        negative_addicted_code = negative_addicted_code.replace('1','one')
+        negative_addicted_code = negative_addicted_code.replace('null','1')
+        negative_addicted_code = negative_addicted_code.replace('one','0')
+        return positive_code, negative_code, negative_addicted_code
+    else:
+        negative_code = positive_code
+        addicted_code = positive_code
+        return positive_code, negative_code, negative_addicted_code
+
+
+
+
+
+    '''if A[0] == '-':
+        new_string = A.replace('-','')
+        new_number = int(new_string)
+        addicted_number = int(new_string) - 1
+        X = []
+        i = 0
+        while new_number >= 0:
+            i += 1
+            rest = int(new_number) % 2
+            if(rest == 0):
+                X.append('1')
+            else:
+                X.append('0')
+            new_number = int(new_number / 2)
+            if new_number == 0:
+                X.append('1')
+                break
+            elif new_number == 1:
+                X.append('0')
+                break
+        X.reverse()
+        t = 0
+        while t < (6 - i):
+            X.append('1')
+            t += 1
+        positive_code = ''.join(X)
+        X.append('.')
+        X.append('1')
+        X.reverse()
+        reversed_code = ''.join(X)
+        #дополнительный код (для new_number + 1)
+        i = 0
+        addicted_X = []
+        while addicted_number >= 0:
+            i += 1
+            rest = int(addicted_number) % 2
+            if(rest == 0):
+                addicted_X.append('1')
+            else:
+                addicted_X.append('0')
+            addicted_number = int(addicted_number / 2)
+            if addicted_number == 0:
+                addicted_X.append('1')
+                break
+            elif addicted_number == 1:
+                addicted_X.append('0')
+                break
+        addicted_X.reverse()
+        t = 0
+        while t < (6 - i):
+            addicted_X.append('1')
+            t += 1
+        addicted_X.append('.')
+        addicted_X.append('1')
+        addicted_X.reverse()
+        addicted_code = ''.join(addicted_X)
+        return positive_code, reversed_code, addicted_code
+    else:
+        new_number = int(A)
+        X = []
+        i = 0
+        while new_number >= 0:
+            i += 1
+            rest = int(new_number) % 2
+            X.append(str(rest))
+            new_number = int(new_number / 2)
+            if new_number == 0:
+                X.append('0')
+                break
+            elif new_number == 1:
+                X.append('1')
+                break
+        X.reverse()
+        t = 0
+        while t < (6 - i):
+            X.append('0')
+            t += 1
+        X.append('.')
+        X.append('0')
+        X.reverse()
+        final_string = ''.join(X)
+        return final_string'''
+
 def checkalph(A,X):
     IsAlphTrue = False
     i = 0 #обнуление счётчиков
@@ -110,7 +273,7 @@ def convert(var_input,var_output,text):
         #перевод в произвольную до точки
         global_integer_array = []
         new_number = int(result_integer)
-        while new_number >= 0:
+        while new_number >= 0:                                          ###
             rest = int(new_number) % int(var_output)
             if (rest == 10):
                 global_integer_array.append('A')
