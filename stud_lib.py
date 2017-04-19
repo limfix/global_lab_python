@@ -30,7 +30,6 @@ def init_code(A):
         X.append('0')
         t += 1
     X.reverse()
-    X.append('.')
     X.append('0')
     X.reverse()
     positive_code = ''.join(X)
@@ -61,7 +60,6 @@ def init_code(A):
         while t < (6 - i):
             X.append('0')
             t += 1
-        X.append('.')
         X.append('0')
         X.reverse()
         addicted_code = ''.join(X)
@@ -74,94 +72,7 @@ def init_code(A):
     else:
         negative_code = positive_code
         addicted_code = positive_code
-        return positive_code, negative_code, negative_addicted_code
-
-
-
-
-
-    '''if A[0] == '-':
-        new_string = A.replace('-','')
-        new_number = int(new_string)
-        addicted_number = int(new_string) - 1
-        X = []
-        i = 0
-        while new_number >= 0:
-            i += 1
-            rest = int(new_number) % 2
-            if(rest == 0):
-                X.append('1')
-            else:
-                X.append('0')
-            new_number = int(new_number / 2)
-            if new_number == 0:
-                X.append('1')
-                break
-            elif new_number == 1:
-                X.append('0')
-                break
-        X.reverse()
-        t = 0
-        while t < (6 - i):
-            X.append('1')
-            t += 1
-        positive_code = ''.join(X)
-        X.append('.')
-        X.append('1')
-        X.reverse()
-        reversed_code = ''.join(X)
-        #дополнительный код (для new_number + 1)
-        i = 0
-        addicted_X = []
-        while addicted_number >= 0:
-            i += 1
-            rest = int(addicted_number) % 2
-            if(rest == 0):
-                addicted_X.append('1')
-            else:
-                addicted_X.append('0')
-            addicted_number = int(addicted_number / 2)
-            if addicted_number == 0:
-                addicted_X.append('1')
-                break
-            elif addicted_number == 1:
-                addicted_X.append('0')
-                break
-        addicted_X.reverse()
-        t = 0
-        while t < (6 - i):
-            addicted_X.append('1')
-            t += 1
-        addicted_X.append('.')
-        addicted_X.append('1')
-        addicted_X.reverse()
-        addicted_code = ''.join(addicted_X)
-        return positive_code, reversed_code, addicted_code
-    else:
-        new_number = int(A)
-        X = []
-        i = 0
-        while new_number >= 0:
-            i += 1
-            rest = int(new_number) % 2
-            X.append(str(rest))
-            new_number = int(new_number / 2)
-            if new_number == 0:
-                X.append('0')
-                break
-            elif new_number == 1:
-                X.append('1')
-                break
-        X.reverse()
-        t = 0
-        while t < (6 - i):
-            X.append('0')
-            t += 1
-        X.append('.')
-        X.append('0')
-        X.reverse()
-        final_string = ''.join(X)
-        return final_string'''
+        return positive_code, negative_code, addicted_code
 
 def checkalph(A,X):
     IsAlphTrue = False
@@ -408,4 +319,110 @@ def convert(var_input,var_output,text):
                     break
         global_array.reverse()
         global_arrayString = ''.join(global_array)
+        global_arrayString = round(int(global_arrayString))
         return global_arrayString
+
+def init_double_code(A):
+    negative_number = False
+    i = 0
+    X = []
+
+    if A[0] == '1':
+        negative_number = True
+        while negative_number == True:
+            editing_code = A
+            edit_addicted_string = editing_code
+            negative_code = edit_addicted_string.replace('0','null')
+            negative_code = negative_code.replace('1','one')
+            negative_code = negative_code.replace('null','1')
+            negative_code = negative_code.replace('one','0')
+            while i < len(negative_code):
+                if A[i] == '.':
+                    i += 1
+                    continue
+                else:
+                    X.append(A[i])
+                    i += 1
+            X.reverse()
+            i = 0
+            j = 0
+            total_count = len(X)
+            X[0] = int(X[0]) + 1
+            while i < len(X):
+                while j < len(X):
+                    if( (j == (len(X) - 1)) and (int(X[j]) == 2) ):
+                        X.append(1)
+                        X[j] = 0
+                        break
+                    elif int(X[j]) == 2:
+                        X[j] = 0
+                        X[j+1] = int(X[j+1]) + 1
+                    j += 1
+                if i > total_count:
+                    break
+                i += 1
+            i = 0
+            while i < len(X):
+                X[i] = str(X[i])
+                i += 1
+            X.reverse()
+            addicted_code = ''.join(X)
+            return addicted_code, negative_code
+    elif A[0] == '0':
+        negative_number = False
+        addicted_code = A
+        negative_code = A
+        return addicted_code, negative_code
+    else:
+        print('Error')
+        quit()
+
+def convert_neg_code(neg_code):
+    negative_number = False
+    X = []
+    Y = []
+    i = 1
+    if neg_code[0] == '1':
+        negative_number = True
+    if negative_number == True:
+        while i < len(neg_code):
+            X.append(str(neg_code[i]))
+            i += 1
+        X = ''.join(X)
+        X = convert(2,10,X)
+        i = 0
+        X = str(X)
+        while i < len(X):
+            Y.append(X[i])
+            i += 1
+        Y.reverse()
+        Y.append('-')
+        Y.reverse()
+        Y = ''.join(Y)
+        return Y
+    elif negative_number == False:
+        while i < len(neg_code):
+            X.append(str(neg_code[i]))
+            i += 1
+        X = ''.join(X)
+        X = convert(2,10,X)
+        return X
+
+
+def sum_neg_code(neg_code_one,neg_code_two,count_rank):
+    negative_limit = -(2**(int(count_rank)))+1
+    positive_limit = 2**(int(count_rank))
+    neg_code_one = int((convert_neg_code(neg_code_one)))
+    neg_code_two = int((convert_neg_code(neg_code_two)))
+    integer_result = neg_code_one + neg_code_two
+    error_message = 'Разрядная сетка переполнена. Введите корректное значение'
+    X = []
+    i = 0
+    if( neg_code_one or neg_code_two ) > positive_limit:
+        return error_message
+    elif( neg_code_one or neg_code_two ) < negative_limit:
+        return error_message
+    elif ((integer_result > positive_limit) or (integer_result < negative_limit)):
+        return error_message
+    else:
+        return integer_result
